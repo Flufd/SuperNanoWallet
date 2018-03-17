@@ -1,0 +1,3 @@
+[submodule "lib/NanoDotNet"]
+	path = lib/NanoDotNet
+	url = https://github.com/Flufd/NanoDotNet.git

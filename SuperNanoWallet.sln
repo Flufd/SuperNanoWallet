@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2002
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperNanoWallet", "SuperNanoWallet\SuperNanoWallet.csproj", "{856653BD-49CC-4F4B-B94C-7CCEE741E8BD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{B2D39169-B14A-4BD0-92AC-5839B2C7298D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NanoDotNet", "lib\NanoDotNet\NanoDotNet\NanoDotNet.csproj", "{3084AC6A-9710-4251-AB15-5A6B54107041}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blake2Sharp", "lib\NanoDotNet\lib\Blake2Sharp\Blake2Sharp.csproj", "{7EEF31E5-5AFF-47BF-8517-75BF5434C96D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{856653BD-49CC-4F4B-B94C-7CCEE741E8BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{856653BD-49CC-4F4B-B94C-7CCEE741E8BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{856653BD-49CC-4F4B-B94C-7CCEE741E8BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{856653BD-49CC-4F4B-B94C-7CCEE741E8BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3084AC6A-9710-4251-AB15-5A6B54107041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3084AC6A-9710-4251-AB15-5A6B54107041}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3084AC6A-9710-4251-AB15-5A6B54107041}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3084AC6A-9710-4251-AB15-5A6B54107041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EEF31E5-5AFF-47BF-8517-75BF5434C96D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EEF31E5-5AFF-47BF-8517-75BF5434C96D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EEF31E5-5AFF-47BF-8517-75BF5434C96D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EEF31E5-5AFF-47BF-8517-75BF5434C96D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3084AC6A-9710-4251-AB15-5A6B54107041} = {B2D39169-B14A-4BD0-92AC-5839B2C7298D}
+		{7EEF31E5-5AFF-47BF-8517-75BF5434C96D} = {B2D39169-B14A-4BD0-92AC-5839B2C7298D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A130391-C48F-4ECB-94AB-C53686EADFDD}
+	EndGlobalSection
+EndGlobal
