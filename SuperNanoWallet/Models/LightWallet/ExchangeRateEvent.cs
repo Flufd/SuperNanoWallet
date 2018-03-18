@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SuperNanoWallet.Models.LightWallet
 {
-    public class ExchangeRateEvent
+    public class ExchangeRateEvent : LightWalletEvent
     {
         public string Currency { get; set; }
         public decimal Price { get; set; }

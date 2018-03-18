@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using SuperNanoWallet.Models.LightWallet;
 using System;
@@ -14,51 +15,57 @@ namespace SuperNanoWallet
 {
     public class WalletEndpointClient
     {
-        class OverrideNamingStrategy : SnakeCaseNamingStrategy
-        {
-            public string GetPropertyName(string name) => this.ResolvePropertyName(name);
-        }
-
         private readonly string endpoint;
-        private Dictionary<string, Type> models;
+        private readonly JsonParser jsonParser;
         private ClientWebSocket webSocket;
-        private OverrideNamingStrategy overrideNamingStrategy;
+       
+        private JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver()
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            }
+        };
+
 
         public WalletEndpointClient(string endpoint)
         {
             this.endpoint = endpoint;
-
-            overrideNamingStrategy = new OverrideNamingStrategy();
-
-            // Register event models
-            models = new Dictionary<string, Type>();
-            models.Add(GetPropertyNames(typeof(ExchangeRateEvent)), typeof(ExchangeRateEvent));
-
+            this.jsonParser = new JsonParser();          
         }
 
         public async Task Start()
         {
-            webSocket = new ClientWebSocket();
-            await webSocket.ConnectAsync(new Uri($"wss://{endpoint}"), CancellationToken.None);
-
-            //Task.Run(async () => await ReceiveData());
-            try
+            while (true)
             {
-                await ReceiveData().ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
+                webSocket = new ClientWebSocket();
+                await webSocket.ConnectAsync(new Uri($"wss://{endpoint}"), CancellationToken.None);
 
-            }
+                WalletStartComplete?.Invoke(this, new EventArgs());
 
-            //while (true)
-            //{
-            //    Console.ReadLine();
+                try
+                {
+                    await ReceiveData().ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    break;                   
+                }
+            }          
+        }
 
-            //    var text = "{\"account\":\"xrb_3iuommeb5gpnhxbsubeswmbg5rdydfstzpih9qgmmfcnqmxs1bzeootdqryq\",\"action\":\"account_subscribe\",\"currency\":\"USD\"}";
-            //    var bytes = Encoding.UTF8.GetBytes(text);
-            //    await x.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
-            //}
+        public async Task RegisterAccount(string account)
+        {            
+            var json = JsonConvert.SerializeObject(new { Account = account, Action = "account_subscribe", Currency = "USD" }, Formatting.None, jsonSerializerSettings);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            await webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
+        }
+
+        public async Task GetAccountHistory(string account, int count)
+        {
+            var json = JsonConvert.SerializeObject(new { Account = account, Action = "account_history", Count = count}, Formatting.None, jsonSerializerSettings);
+            var bytes = Encoding.UTF8.GetBytes(json);
+            await webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
         }
 
         public async Task ReceiveData()
@@ -91,26 +98,23 @@ namespace SuperNanoWallet
                 }
             }
         }
-
-        private string GetPropertyNames(Type type)
-        {
-            return String.Join("", type.GetProperties().Select(a => overrideNamingStrategy.GetPropertyName(a.Name)).OrderBy(a => a));
-        }
-
+        
         private void RaiseReceivedData(string json)
         {
+            var walletEvent = jsonParser.ParseEvent(json);
 
-            var jsonObject = JObject.Parse(json);
-
-            // What kind of object do we have?
-            var typeSignature = String.Join("", jsonObject.Properties().Select(a => a.Name).OrderBy(a => a));
-
-            if (models.TryGetValue(typeSignature, out Type type))
+            if (walletEvent != null)
             {
-                switch (true)
+                switch (walletEvent)
                 {
-                    case bool _ when type == typeof(ExchangeRateEvent):
-                        ReceivedExchangeRateEvent?.Invoke(this, new EventArgs<ExchangeRateEvent>(jsonObject.ToObject<ExchangeRateEvent>()));
+                    case ExchangeRateEvent typedEvent:
+                        ReceivedExchangeRateEvent?.Invoke(this, new EventArgs<ExchangeRateEvent>(typedEvent));
+                        break;
+                    case AccountSummaryEvent typedEvent:
+                        ReceivedAccountSummaryEvent?.Invoke(this, new EventArgs<AccountSummaryEvent>(typedEvent));
+                        break;
+                    case AccountHistoryEvent typedEvent:
+                        ReceivedAccountHistoryEvent?.Invoke(this, new EventArgs<AccountHistoryEvent>(typedEvent));
                         break;
                     default:
                         break;
@@ -119,5 +123,10 @@ namespace SuperNanoWallet
         }
 
         public event EventHandler<EventArgs<ExchangeRateEvent>> ReceivedExchangeRateEvent;
+        public event EventHandler<EventArgs<AccountSummaryEvent>> ReceivedAccountSummaryEvent;
+        public event EventHandler<EventArgs<AccountHistoryEvent>> ReceivedAccountHistoryEvent;
+
+        public event EventHandler<EventArgs> WalletStartComplete;
+
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SuperNanoWallet.Models.WalletConfig;
+using SuperNanoWallet.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +22,9 @@ namespace SuperNanoWallet
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(WalletConfig walletConfig, string password)
         {
+            this.DataContext = new MainViewModel(walletConfig, password);
             InitializeComponent();
         }
     }

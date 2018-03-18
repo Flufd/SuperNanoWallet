@@ -17,5 +17,24 @@ namespace SuperNanoWallet.ViewModels
             }
             return reference;
         }
+
+        protected ICommand GetCommand(ref ICommand reference, Action action)
+        {
+            return GetCommand(ref reference, action, () => true);
+        }
+
+        protected ICommand GetCommand<T>(ref ICommand reference, Action<T> action, Func<bool> executionPredicate)
+        {
+            if (reference == null)
+            {
+                reference = new DelegateCommand<T>(action, executionPredicate);
+            }
+            return reference;
+        }
+
+        protected ICommand GetCommand<T>(ref ICommand reference, Action<T> action)
+        {
+            return GetCommand(ref reference, action, () => true);
+        }
     }
 }

@@ -7,24 +7,14 @@
         xmlns:local="clr-namespace:SuperNanoWallet"
         xmlns:vm="clr-namespace:SuperNanoWallet.ViewModels"
         mc:Ignorable="d"
-        Title="SuperNanoWallet" Height="450" Width="800">
-    <Window.DataContext>
+        Title="SuperNanoWallet" Height="450" Width="1000">
+    <!--<Window.DataContext>
         <vm:MainViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
     <Window.Resources>
-        <SolidColorBrush x:Key="AccentColour" Color="#4b90e2"/>
-        <SolidColorBrush x:Key="AccentColour2" Color="#ea881f"/>
-        <SolidColorBrush x:Key="AccentColourBackground" Color="#0f1121"/>
-        <FontFamily x:Key="Nunito">pack://application:,,,/Resources/#Nunito</FontFamily>
-        <Style TargetType="Button" x:Key="ButtonStyle">
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Background" Value="Red"/>
-                </Trigger>
-            </Style.Triggers>
-            <Setter Property="Foreground" Value="Blue"/>
-        </Style>
-       
+        <!--<Style TargetType="{x:Type Window}">
+            <Setter Property="FontFamily" Value="{StaticResource Nunito}" />
+        </Style>-->
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -40,24 +30,59 @@
                     <ColumnDefinition Width="50"/>
                     <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
-            <TextBlock FontSize="20" FontWeight="Light" Foreground="White" Grid.Column="0" FontFamily="{StaticResource Nunito}">Super Nano Wallet</TextBlock>
-                <TextBlock FontSize="20" FontWeight="Light" Foreground="White" Grid.Column="1" FontFamily="{StaticResource Nunito}">BTC</TextBlock>
-                <TextBlock FontSize="20" FontWeight="Light" Foreground="White" Grid.Column="2" FontFamily="{StaticResource Nunito}" Text="{Binding BTCPrice}"></TextBlock>
+                <TextBlock FontSize="20" FontWeight="Light" Foreground="White" Grid.Column="0" FontFamily="{StaticResource Nunito}"
+                           VerticalAlignment="Center" Margin="10,0,0,0">
+                    Super Nano Wallet</TextBlock>
+                <Button Grid.Column="3" Command="{Binding NewAccountCommand}" >New Account</Button>
             </Grid>
         </Grid>
         <Grid Grid.Row="1" Background="{StaticResource AccentColour}">
-            <TabControl ItemsSource="{Binding Accounts}">               
+            <TabControl ItemsSource="{Binding Accounts}">
                 <TabControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding AccountNumber}" />
+                        <TextBlock Text="{Binding ShortAccountNumber}" />
                     </DataTemplate>
                 </TabControl.ItemTemplate>
                 <TabControl.ContentTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding AccountNumber}"/>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding BalanceString}" Grid.Row="0"/>
+                            <ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Transactions}">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Type" Width="75" DisplayMemberBinding="{Binding TransactionType}" />
+                                        <GridViewColumn Header="Amount" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" Width="80" FontFamily="Consolas"
+                                                        Text="{Binding Path=AmountString}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Account" Width="250"  >
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock TextAlignment="Right" FontFamily="Consolas"
+                                                        Text="{Binding ShortAccountNumber}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                        
                     </DataTemplate>
                 </TabControl.ContentTemplate>
-            </TabControl>            
+            </TabControl>
         </Grid>
     </Grid>
 </Window>

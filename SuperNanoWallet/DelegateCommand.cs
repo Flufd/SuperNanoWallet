@@ -9,9 +9,9 @@ namespace SuperNanoWallet
 {
     public class DelegateCommand : ICommand
     {
-        private readonly Action action;
-        private readonly Func<bool> executionPredicate;
-        private EventHandler _canExecuteChanged;
+        protected readonly Action action;
+        protected readonly Func<bool> executionPredicate;
+        protected EventHandler _canExecuteChanged;
 
         public DelegateCommand(Action action, Func<bool> executionPredicate)
         {
@@ -44,6 +44,46 @@ namespace SuperNanoWallet
         public void RaiseCanExecuteChanged()
         {
              _canExecuteChanged?.Invoke(this, new EventArgs());
+        }
+    }
+
+    public class DelegateCommand<T> : ICommand
+    {
+        protected readonly Action<T> action;
+        protected readonly Func<bool> executionPredicate;
+        protected EventHandler _canExecuteChanged;
+
+        public DelegateCommand(Action<T> action, Func<bool> executionPredicate)
+        {
+            this.action = action;
+            this.executionPredicate = executionPredicate;
+        }
+
+        public void Execute(object parameter)
+        {
+            action((T)parameter);
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return executionPredicate();
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+                _canExecuteChanged += value;
+            }
+            remove
+            {
+                _canExecuteChanged -= value;
+            }
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            _canExecuteChanged?.Invoke(this, new EventArgs());
         }
     }
 }

@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -58,13 +59,32 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="Encryption.cs" />
     <Compile Include="EventArgs.cs" />
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\AccountTransaction.cs" />
+    <Compile Include="Models\Block.cs" />
+    <Compile Include="Models\BlockType.cs" />
+    <Compile Include="Models\LightWallet\AccountHistoryEvent.cs" />
+    <Compile Include="Models\LightWallet\AccountSummaryEvent.cs" />
     <Compile Include="Models\LightWallet\ExchangeRateEvent.cs" />
+    <Compile Include="Models\LightWallet\JsonParser.cs" />
+    <Compile Include="Models\LightWallet\LightWalletEvent.cs" />
+    <Compile Include="Models\TransactionType.cs" />
+    <Compile Include="Models\WalletConfig\SavedAccount.cs" />
+    <Compile Include="Models\WalletConfig\WalletConfig.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="WalletEndpointClient.cs" />
+    <Page Include="LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
