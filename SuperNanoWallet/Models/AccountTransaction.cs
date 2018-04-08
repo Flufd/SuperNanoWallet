@@ -14,5 +14,6 @@ namespace SuperNanoWallet.Models
         public NanoAmount Amount { get; set; }
         public string AmountString => Amount.ToString(AmountBase.Nano);
         public TransactionType TransactionType { get; set; }
+        public string Hash { get; internal set; }
     }
 }

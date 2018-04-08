@@ -37,7 +37,7 @@
             </Grid>
         </Grid>
         <Grid Grid.Row="1" Background="{StaticResource AccentColour}">
-            <TabControl ItemsSource="{Binding Accounts}">
+            <TabControl ItemsSource="{Binding Accounts}" SelectedIndex="{Binding SelectedAccountIndex}">
                 <TabControl.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding ShortAccountNumber}" />
@@ -54,7 +54,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding BalanceString}" Grid.Row="0"/>
+                            <TextBlock Text="{Binding BalanceString}" Grid.Row="0"/>
                             <ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Transactions}">
                                 <ListView.View>
                                     <GridView>
@@ -78,6 +78,35 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+                            <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding AccountNumber, Mode=OneWay}" IsReadOnly="True" Padding="5"></TextBox>
+                            <TabControl Grid.Column="1" Grid.Row="1">
+                                <TabItem Header="Send">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            
+                                        </Grid.RowDefinitions>
+                                        <Label Grid.Column="0" Height="30">Address</Label>
+                                        <TextBox Grid.Column="1" Height="30" Text="{Binding DataContext.SendAddress, 
+                                            RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></TextBox>
+                                        <Label Grid.Column="0" Grid.Row="1" Height="30">Amount (Nano)</Label>
+                                        <TextBox Grid.Column="1" Grid.Row="1" Height="30" 
+                                                 Text="{Binding DataContext.SendAmount, 
+                                                        StringFormat=0{0.0},                                            
+                                                        RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"></TextBox>      
+                                        <Button Grid.Row="2" Grid.ColumnSpan="2" 
+                                                Command="{Binding DataContext.SendCommand, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" >Send</Button>
+                                    </Grid>
+                                    
+                                </TabItem>
+                            </TabControl>
+                            
                         </Grid>
                         
                     </DataTemplate>

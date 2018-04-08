@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27428.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperNanoWallet", "SuperNanoWallet\SuperNanoWallet.csproj", "{856653BD-49CC-4F4B-B94C-7CCEE741E8BD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3084AC6A-9710-4251-AB15-5A6B54107041} = {3084AC6A-9710-4251-AB15-5A6B54107041}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{B2D39169-B14A-4BD0-92AC-5839B2C7298D}"
 EndProject

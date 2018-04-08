@@ -49,6 +49,20 @@ namespace SuperNanoWallet.ViewModels
             set { accounts = value; RaisePropertyChanged(nameof(Accounts)); }
         }
 
+        private int selectedAccountIndex;
+        public int SelectedAccountIndex
+        {
+            get { return selectedAccountIndex; }
+            set { selectedAccountIndex = value; RaisePropertyChanged(nameof(SelectedAccountIndex)); }
+        }
+
+        public Account SelectedAccount
+        {
+            get
+            {
+                return Accounts[SelectedAccountIndex];
+            }
+        }
 
         private decimal btcPrice;
         public decimal BTCPrice
@@ -57,14 +71,26 @@ namespace SuperNanoWallet.ViewModels
             set { btcPrice = value; RaisePropertyChanged(nameof(BTCPrice)); }
         }
 
+        private decimal sendAmount;
+        public decimal SendAmount
+        {
+            get { return sendAmount; }
+            set { sendAmount = value; RaisePropertyChanged(nameof(SendAmount)); }
+        }
+
+        private string sendAddress = "TESTEST";
+        public string SendAddress
+        {
+            get { return sendAddress; }
+            set { sendAddress = value; RaisePropertyChanged(nameof(SendAddress)); }
+        }
+
         public WalletConfig WalletConfig { get; }
               
-
-        private ICommand newAccountCommand;
         private readonly string password;
 
+        private ICommand newAccountCommand;
         public ICommand NewAccountCommand => GetCommand(ref newAccountCommand, NewAccount);
-
         private void NewAccount()
         {
             // Create first account from seed
@@ -80,6 +106,20 @@ namespace SuperNanoWallet.ViewModels
 
             File.WriteAllBytes("walletData.snw", bytes);
 
+        }
+
+        private ICommand sendCommand;
+        public ICommand SendCommand => GetCommand(ref sendCommand, Send);
+
+        private void Send()
+        {
+            // get the private key
+            var acc = WalletConfig.Accounts.FirstOrDefault(a => a.AccountNumber == SelectedAccount.AccountNumber);
+            if(acc != null)
+            {
+                // get the work
+                SelectedAccount.Send(SendAddress, SendAmount, acc.PrivateKey);
+            }            
         }
     }
 }

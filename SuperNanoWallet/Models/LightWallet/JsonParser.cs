@@ -28,6 +28,7 @@ namespace SuperNanoWallet.Models.LightWallet
             AddModel<AccountSummaryEvent>();
             AddModel<AccountHistoryEvent>();
             AddModel<AccountHistoryWithPreviousEvent>();
+            AddModel<WorkEvent>();
         }
 
         private JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings
@@ -37,6 +38,7 @@ namespace SuperNanoWallet.Models.LightWallet
                 NamingStrategy = new SnakeCaseNamingStrategy()
             }
         };
+
 
         private void AddModel<T>()
         {
